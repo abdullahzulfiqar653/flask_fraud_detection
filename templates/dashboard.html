@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; /* Overall page color */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .card {
+            flex-basis: 30%;
+            background-color: #4CAF50; /* Green for Total Transactions */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:nth-child(2) {
+            background-color: #2196F3; /* Blue for Valid Transactions */
+        }
+
+        .card:nth-child(3) {
+            background-color: #FF5722; /* Orange for Fraud Review */
+        }
+
+        .upload-section {
+            margin-top: 30px;
+        }
+
+        .transactions {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+            text-align: center;
+        }
+
+        th {
+            background-color: black;
+            font-weight: bold;
+        }
+
+        .transactions th {
+            background-color: black;
+            color: #fff;
+        }
+
+        .transactions td {
+            background-color: #fff;
+        }
+
+        .transactions tr.fraud td {
+            background-color: #ffcccc; /* Light red for Fraud Transactions */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div class="cards">
+            <div class="card">
+                <h2>Total Transactions</h2>
+                <p>{{ cards_data.approved }}</p>
+            </div>
+            <div class="card">
+                <h2>Valid Transactions</h2>
+                <p>{{ cards_data.rejected }}</p>
+            </div>
+            <div class="card">
+                <h2>Fraud Review</h2>
+                <p>{{ cards_data.pending_review }}</p>
+            </div>
+        </div>
+        <div class="upload-section">
+            <h2>Upload Transactions</h2>
+            <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file">
+                <input type="button" value="Upload" class="btn" onclick="submitForm()">
+            </form>
+        </div>
+        <div class="transactions">
+            <h2>Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Time</th>
+                        <th>Amount</th>
+                        <th>Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr class="{% if transaction['Class'] == 1 %}fraud{% endif %}">
+                        <td>{{ transaction['Transaction ID'] }}</td>
+                        <td>{{ transaction['Time'] }}</td>
+                        <td>{{ transaction['Amount'] }}</td>
+                        <td>{{ transaction['Class'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function submitForm() {
+            document.getElementById("uploadForm").submit();
+        }
+    </script>
+</body>
+</html>
