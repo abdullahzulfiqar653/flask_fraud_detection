@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -23,9 +22,19 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
-            color: #333;
+        .navbar-heading {
+            font-size: 2.5rem; /* Adjust font size as needed */
+            color: #333; /* Text color */
             text-align: center;
+            border-bottom: 2px solid #333; /* Bottom border for navbar effect */
+            padding-bottom: 10px; /* Adjust spacing */
+            margin-bottom: 20px; /* Adjust spacing */
+        }
+
+        .sub-heading {
+            font-size: 2rem; /* Adjust font size as needed */
+            color: #333; /* Text color */
+            margin-bottom: 30px; /* Adjust spacing */
         }
 
         .cards {
@@ -75,6 +84,7 @@
         th {
             background-color: black;
             font-weight: bold;
+            color: white; /* Text color for th */
         }
 
         .transactions th {
@@ -108,8 +118,14 @@
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <h1 class="navbar-heading">Dashboard</h1>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>Dashboard</h1>
+        <h2 class="sub-heading">Transactions</h2>
         <div class="cards">
             <div class="card">
                 <h2>Total Transactions</h2>
@@ -132,7 +148,6 @@
             </form>
         </div>
         <div class="transactions">
-            <h2>Transactions</h2>
             <table>
                 <thead>
                     <tr>
