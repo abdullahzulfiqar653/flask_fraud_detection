@@ -105,11 +105,60 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+          
+        }
+
+        .welcome {
+            float: right;
+            padding: 14px 20px;
+            color: white;
+        }
+
+        .logout-btn {
+            float: right;
+            padding: 14px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Dashboard</h1>
+        <div class="navbar">
+            <a href="/dashboard">Dashboard</a>
+            <span class="welcome">Welcome, {{ username }}</span>
+            <a class="logout-btn" href="/logout">Logout</a>
+             
+        </div>
+
+
+
+
+        
+       
         <div class="cards">
             <div class="card">
                 <h2>Total Transactions</h2>
