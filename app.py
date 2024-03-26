@@ -57,17 +57,28 @@ def prepare_data_for_template(data):
             transactions.append(transaction)
     return transactions
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 def signup(username, email, password):
+    # Check if username or email already exists
+    with open("users.txt", "r") as file:
+        for line in file:
+            existing_username, existing_email, _ = line.strip().split(",")
+            if username == existing_username or email == existing_email:
+                return False
+
+    # If username and email do not exist, add the new entry
     with open("users.txt", "a") as file:
         file.write(f"{username},{email},{password}\n")
+    return True
 
 def get_users():
     with open("users.txt", "r") as file:
         return [line.strip().split(',') for line in file]
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
 @app.route('/signin')
 def login():
     return render_template('signin.html')
@@ -79,7 +90,9 @@ def signup_route():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        signup(username, email, password)
+        is_created = signup(username, email, password)
+        if not is_created:
+            return render_template('signup.html', error="username or email already exist")
         return redirect(url_for('login_route'))
     return render_template('signup.html')
 
@@ -93,7 +106,7 @@ def login_route():
             if username == user[0] and password == user[2]:  
                 session['username'] = username
                 return redirect(url_for('upload_file'))
-        return "Invalid username or password."
+        return render_template('signin.html', error="Invalid username or password.")
     return render_template('signin.html')
 
 
@@ -125,12 +138,12 @@ def upload_file():
                 transactions = prepare_data_for_template(df)
                 # fraud_transactions = check_fraud_transactions(transactions)
 
-                return render_template('dashboard.html',cards_data=count_fraud_valid_transactions(df), transactions=transactions)
+                return render_template('dashboard.html',cards_data=count_fraud_valid_transactions(df), transactions=transactions, username=session['username'])
             else:
                 flash('Invalid file format')
                 return redirect(request.url)
-        return render_template('dashboard.html', cards_data=count_fraud_valid_transactions(), transactions=transactions ,username=session['username'])
-    return redirect(url_for('login_route'))
+        return render_template('dashboard.html', cards_data=count_fraud_valid_transactions(), transactions=transactions, username=session['username'])
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
