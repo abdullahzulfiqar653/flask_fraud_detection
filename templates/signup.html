@@ -62,7 +62,9 @@
                         <input type="text" name="username" class="form-control" placeholder="Username" required>
                         <input type="email" name="email" class="form-control" placeholder="Email" required>
                         <input type="password"  name="password" class="form-control" placeholder="Password" required>
+                        <span style="color: red;"> {{ error }}</span>
                         <button type="submit" class="btn">Sign Up</button>
+                        Have account? Login <a href="{{ url_for('login') }}">here</a>
                     </form>
                 </div>
             </div>

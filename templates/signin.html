@@ -61,7 +61,9 @@
                         <input type="text" name="username" class="form-control" placeholder="Username" required>
                         
                         <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <span style="color: red;"> {{ error }}</span>
                         <button type="submit" class="btn">Login</button>
+                        No account? signup <a href="{{ url_for('signup_route') }}">here</a>
                     </form>
                 </div>
             </div>
