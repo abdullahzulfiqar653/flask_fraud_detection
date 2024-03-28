@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,session
-import pandas as pd
 import os
+import pandas as pd
 from utils import *
 from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -16,12 +17,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return render_template('index.html')
 
-
-@app.route('/signin')
-def login():
-    return render_template('signin.html')
-
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_route():
     if request.method == 'POST':
@@ -31,11 +26,12 @@ def signup_route():
         is_created = signup(username, email, password)
         if not is_created:
             return render_template('signup.html', error="username or email already exist")
-        return redirect(url_for('login_route'))
+        return redirect(url_for('login'))
     return render_template('signup.html')
 
+
 @app.route('/signin', methods=['GET', 'POST'])
-def login_route():
+def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -72,8 +68,10 @@ def upload_file():
                 else:
                     flash('Unsupported file format')
                     return redirect(request.url)
-                
-                transactions = prepare_data_for_template(df)
+                json_transactions = get_json_data(df)
+                transactions = make_assumptions(json_transactions)
+
+                # transactions = prepare_data_for_template(df)
                 # fraud_transactions = check_fraud_transactions(transactions)
 
                 return render_template('dashboard.html',cards_data=count_fraud_valid_transactions(df), transactions=transactions, username=session['username'])

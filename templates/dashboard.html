@@ -182,8 +182,8 @@
         <div class="upload-section">
             <h2>Upload Transactions</h2>
             <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file">
-                <input type="button" value="Upload" class="btn" onclick="submitForm()">
+                <input type="file" name="file" id="file" onchange="enableUploadButton()">
+                <input type="button" value="Upload" class="btn" id="uploadButton" disabled onclick="submitForm()">
             </form>
         </div>
         <div class="transactions">
@@ -193,16 +193,18 @@
                         <th>Transaction ID</th>
                         <th>Time</th>
                         <th>Amount</th>
-                        <th>Class</th>
+                        <!-- <th>Class</th> -->
+                        <th>Probability</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for transaction in transactions %}
-                    <tr class="{% if transaction['Class'] == 1 %}fraud{% endif %}">
-                        <td>{{ transaction['Transaction ID'] }}</td>
-                        <td>{{ transaction['Time'] }}</td>
-                        <td>{{ transaction['Amount'] }}</td>
-                        <td>{{ transaction['Class'] }}</td>
+                    <tr class="{% if transaction['probability'] > 0.8 %}fraud{% endif %}">
+                        <td>{{ transaction['id'] }}</td>
+                        <td>{{ transaction['time'] }}</td>
+                        <td>{{ transaction['amount'] }}</td>
+                        <!-- <td>{{ transaction['class'] }}</td> -->
+                        <td>{{ transaction['probability'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -211,6 +213,11 @@
     </div>
 
     <script>
+        function enableUploadButton() {
+            var fileInput = document.getElementById('file');
+            var uploadButton = document.getElementById('uploadButton');
+            uploadButton.disabled = fileInput.files.length === 0;
+        }
         function submitForm() {
             document.getElementById("uploadForm").submit();
         }
